@@ -1,0 +1,17 @@
+{
+	"name": "poi-start",
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"unpkg": "dist/index.js",
+	"types": "types/index.d.ts",
+	"scripts": {
+		"build": "rimraf dist && tsc && poi --prod --config config/build.js",
+		"dev": "poi --serve --config config/watch.js"
+	},
+	"author": "shawroger",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^14.10.3",
+		"poi": "^12.8.0"
+	}
+}
