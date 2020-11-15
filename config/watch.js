@@ -1,8 +1,7 @@
 module.exports = {
 	entry: "src/index.ts",
 	output: {
-		format: "umd",
-		moduleName: "Diycode",
+		target: "node",
 		fileNames: {
 			js: "index.js",
 		},

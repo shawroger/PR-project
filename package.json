@@ -1,17 +1,24 @@
 {
-	"name": "poi-start",
+	"name": "pr-project",
 	"version": "0.0.1",
 	"main": "dist/index.js",
 	"unpkg": "dist/index.js",
-	"types": "types/index.d.ts",
 	"scripts": {
-		"build": "rimraf dist && tsc && poi --prod --config config/build.js",
-		"dev": "poi --serve --config config/watch.js"
+		"build": "poi --prod --config config/build.js",
+		"dev": "poi --watch --config config/watch.js",
+		"start": "node dist/index.js"
 	},
 	"author": "shawroger",
 	"license": "ISC",
 	"devDependencies": {
-		"@types/node": "^14.10.3",
+		"@types/fs-extra": "^9.0.4",
+		"@types/node": "^14.14.7",
 		"poi": "^12.8.0"
+	},
+	"dependencies": {
+		"captchapng": "0.0.1",
+		"fs-extra": "^9.0.1",
+		"get-pixels": "^3.3.2",
+		"readline-sync": "^1.4.10"
 	}
 }
