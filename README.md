@@ -12,6 +12,10 @@ npm start
 npm run build
 ```
 
+```
+node app.js
+```
+
 # 温馨提示
 
 1. 请不要改变目录中文件位置，以免运行出错。
