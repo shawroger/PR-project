@@ -1,30 +1,34 @@
 import fse from "fs-extra";
 import getPixels from "get-pixels";
 import { getCaptchaInfo } from "./info";
-import { extractData } from "./deal-data";
+import { DealData } from "./deal-data";
 import { Dir, DirNext } from "./path";
 
 /**
  *
- * @param captchaFile 输入图片文件地址
- * @param pixelFile 输出像素数据地址
+ * @param inFile 输入图片文件地址
+ * @param outFile 输出像素数据地址
  */
-export function useAnalysis(captchaFile: string, pixelFile: string) {
-	getPixels(captchaFile, (err, pixel) => {
+export function useAnalysis(inFile: string, outFile: string) {
+	getPixels(inFile, (err, pixel) => {
 		if (err) {
 			throw err;
 		}
 
-		const data = extractData(Object.values(pixel.data));
-		fse.ensureFileSync(pixelFile);
-		fse.writeJSONSync(pixelFile, data);
+		const data = DealData.fromPixel(pixel);
+		fse.ensureFileSync(outFile);
+		fse.writeJSONSync(outFile, data.data);
 	});
 }
 
-/**
- * 开始分析特征
+/***
+ * 获取分析队列
  */
-export function startAnalysis() {
+export function getAnalysisQueue() {
+	/**
+	 * 分析队列
+	 */
+	const queue: [string, string][] = [];
 	/**
 	 * 获取输入图片数据集
 	 */
@@ -48,7 +52,16 @@ export function startAnalysis() {
 		filenames.forEach((filename, index) => {
 			const newName = filename.slice(0, filename.indexOf(".")).concat(".json");
 			const pixelFile = DirNext.pixel(`${value}/${newName}`);
-			useAnalysis(address[index], pixelFile);
+			queue.push([address[index], pixelFile]);
 		});
 	});
+
+	return queue;
+}
+/**
+ * 开始分析特征
+ */
+export function startAnalysis() {
+	const queue = getAnalysisQueue();
+	queue.forEach((v) => useAnalysis(...v));
 }

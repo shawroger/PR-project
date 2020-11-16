@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>画板</title>
+		<style type="text/css">
+			.rg {
+				float: left;
+				width: 200px;
+				height: 100px;
+				text-align: center;
+				border: 1px black solid;
+				margin-left: -1px;
+			}
+			#cas {
+				width: 400px;
+				height: 400px;
+				border: #000000 1px solid;
+			}
+			img {
+				border: 1px white solid;
+				width: 48px;
+				height: 48px;
+			}
+			#save {
+				width: 400px;
+				text-align: center;
+			}
+			p {
+				margin: 5px 0 5px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="seclect">
+			<div class="rg" id="secc">
+				<p>选择颜色</p>
+				<input type="color" name="" id="cl" value="" />
+			</div>
+			<div class="rg" id="secw">
+				<p>选择大小</p>
+				<button onclick="secwidth(1,this)">小</button>
+				<button onclick="secwidth(5,this)">中</button>
+				<button onclick="secwidth(10,this)">大</button>
+			</div>
+		</div>
+		<div id="cas">
+			<canvas id="cs" width="400" height="300"></canvas>
+		</div>
+		<div id="save">
+			<input type="button" name="" id="savecanvas" value="保存图画" />
+			<input type="button" name="" id="clearcanvas" value="清除图画" />
+		</div>
+
+		<script type="text/javascript">
+			var color = document.getElementById("cl").value; //获取颜色
+			var canvas = document.getElementById("cs"); //获取画布
+			var context = canvas.getContext("2d");
+			var img = document.querySelectorAll("img"); //获取图片数组
+			for (var i = 0; i < img.length; i++) {
+				img[i].onmouseover = appear; //鼠标经过img事件
+				img[i].onmouseout = leave;
+			}
+
+			function appear() {
+				for (var i = 0; i < img.length; i++) {
+					img[i].style.border = "1px solid white";
+				}
+				this.style.border = "1px solid black";
+			}
+			var imgchoose;
+			function secwidth(width, ele) {
+				ele.style.border = "1px solid black";
+				ele.style.backgtoundColor = "rgb(251, 251, 251)";
+				context.lineWidth = width; //将宽度传值给画布
+				imgchoose = ele;
+			}
+			function leave() {
+				for (var i = 0; i < img.length; i++) {
+					img[i].style.border = "1px solid white";
+				}
+				imgchoose.style.border = "1px solid black";
+			}
+			var isDraw = false; 
+			canvas.onmousedown = startDraw; 
+			canvas.onmouseout = stopDraw; 
+			canvas.onmousemove = draw; 
+			canvas.onmouseup = stopDraw; 
+
+			function startDraw(e) {
+				isDraw = true;
+				context.beginPath(); //开始一个新的路径
+				context.strokeStyle = document.getElementById("cl").value;
+				context.moveTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+			}
+			function draw(e) {
+				if (isDraw) {
+					var x = e.pageX - canvas.offsetLeft;
+					var y = e.pageY - canvas.offsetTop;
+					context.lineTo(x, y);
+
+					context.stroke();
+				}
+			}
+			function stopDraw() {
+				isDraw = false;
+			}
+
+			function savecs() {}
+			document.getElementById("clearcanvas").onclick = clearcs;
+			function clearcs() {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+			}
+		</script>
+	</body>
+</html>

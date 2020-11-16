@@ -1,5 +1,5 @@
 import fse from "fs-extra";
-import { countByCols, countByRows, vector16, vector4 } from "./deal-data";
+import { DealData } from "./deal-data";
 import { getPixelInfo } from "./info";
 
 /**
@@ -25,42 +25,18 @@ class Distance {
 			.reduce((pre, cur) => pre + cur * cur, 0);
 	}
 
-	/**
-	 * 4位向量计算
-	 */
-	vector4() {
-		return this.getDistance(vector4(this.data), vector4(this.sample));
+	vector() {
+		return this.getDistance(
+			DealData.from(this.data).vectorData,
+			DealData.from(this.sample).vectorData
+		);
 	}
 
-	/**
-	 * 16位向量计算
-	 * 
-	 * 最推荐距离计算方法
-	 */
-	vector16() {
-		return this.getDistance(vector16(this.data), vector16(this.sample));
-	}
-
-	/**
-	 * 各行作为向量计算
-	 */
-	row() {
-		return this.getDistance(countByRows(this.data), countByRows(this.sample));
-	}
-
-	/**
-	 * 各列作为向量计算
-	 */
-	col() {
-		return this.getDistance(countByCols(this.data), countByCols(this.sample));
-	}
-
-	/**
-	 * 各列、各行作为向量计算
-	 * @param weight 行的权重
-	 */
-	rowAndCol(weight = 0.5) {
-		return weight * this.row() + (1 - weight) * this.col();
+	weakVector() {
+		return this.getDistance(
+			DealData.from(this.data).weakVectorData,
+			DealData.from(this.sample).weakVectorData
+		);
 	}
 }
 /**
@@ -89,7 +65,7 @@ export function runClassify(data: Array<number[]>, decimal = 1) {
 		 */
 		address.forEach((file) => {
 			const sample = fse.readJSONSync(file) as Array<number[]>;
-			const distanceAdder = new Distance(data, sample).vector16();
+			const distanceAdder = new Distance(data, sample).vector();
 			distance += distanceAdder;
 		});
 
