@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "poi --prod --config config/build.js",
 		"dev": "poi --watch --config config/watch.js",
-		"start": "node dist/index.js"
+		"start": "node dist/index.js",
+		"pkg": "pkg -t win app.js"
 	},
 	"author": "shawroger",
 	"license": "ISC",

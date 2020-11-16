@@ -4,3 +4,4 @@ dist
 package-lock
 temp
 .vscode
+app.exe
